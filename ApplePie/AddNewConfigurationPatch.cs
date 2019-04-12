@@ -12,17 +12,17 @@ namespace ApplePie
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class EnableDisableApplePie
+    internal sealed class AddNewConfigurationPatch
     {
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0100;
+        public const int CommandId = 256;
 
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("c345be81-902d-47fe-8f25-c26a41827eb4");
+        public static readonly Guid CommandSet = new Guid("c44f454f-67ec-43d4-987e-4d02bb2db530");
 
         /// <summary>
         /// VS Package that provides this command, not null.
@@ -30,26 +30,25 @@ namespace ApplePie
         private readonly AsyncPackage package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnableDisableApplePie"/> class.
+        /// Initializes a new instance of the <see cref="AddNewConfigurationPatch"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private EnableDisableApplePie(AsyncPackage package, OleMenuCommandService commandService)
+        private AddNewConfigurationPatch(AsyncPackage package, OleMenuCommandService commandService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
             var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            menuItem.Checked = ApplePieConfiguration.Default.EnableApplePie;
             commandService.AddCommand(menuItem);
         }
 
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static EnableDisableApplePie Instance
+        public static AddNewConfigurationPatch Instance
         {
             get;
             private set;
@@ -72,12 +71,12 @@ namespace ApplePie
         /// <param name="package">Owner package, not null.</param>
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            // Switch to the main thread - the call to AddCommand in EnableDisableApplePie's constructor requires
+            // Switch to the main thread - the call to AddCommand in AddNewConfigurationPatch's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-            Instance = new EnableDisableApplePie(package, commandService);
+            Instance = new AddNewConfigurationPatch(package, commandService);
         }
 
         /// <summary>
@@ -89,10 +88,8 @@ namespace ApplePie
         /// <param name="e">Event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            ApplePieConfiguration.Default.EnableApplePie = !ApplePieConfiguration.Default.EnableApplePie;
-            ApplePieConfiguration.Default.Save();
-            var command = sender as MenuCommand;
-            command.Checked = ApplePieConfiguration.Default.EnableApplePie;
+            var documentationControl = new SelectSitecoreConfigurationNodeWindow();
+            documentationControl.ShowDialog();
         }
     }
 }

@@ -15,10 +15,10 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h" />
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
@@ -35,9 +35,21 @@
          other menus or buttons (commands); from a visual point of view you can see the
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
+    <Menus>
+      <Menu guid="guidApplePiePackageCmdSet" id="TopLevelMenu" priority="0x700" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>TestMenu</ButtonText>
+          <CommandName>ApplePie</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
     <Groups>
       <Group guid="guidApplePiePackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidApplePiePackageCmdSet" id="TopLevelMenu" />
+      </Group>
+      <Group guid="guidApplePiePackageCmdSet1" id="SolutionExplorerContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
     </Groups>
 
@@ -56,7 +68,14 @@
         <Parent guid="guidApplePiePackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke EnableDisableApplePie</ButtonText>
+          <ButtonText>Enable\Disable Apple Pie Suite</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidApplePiePackageCmdSet1" id="cmdidAddNewConfigurationPatch" priority="0x0100" type="Button">
+        <Parent guid="guidApplePiePackageCmdSet1" id="SolutionExplorerContextMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Add new configuration patch</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -68,7 +87,8 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\EnableDisableApplePie.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+      <Bitmap guid="guidImages" href="Resources\EnableDisableApplePie.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages1" href="Resources\AddNewConfigurationPatch.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -83,7 +103,21 @@
       <IDSymbol name="TopLevelMenu" value="0x1021" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{42108da8-5ce1-4e0c-a97f-a0b237e57b88}" >
+    <GuidSymbol name="guidImages" value="{42108da8-5ce1-4e0c-a97f-a0b237e57b88}">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{c44f454f-67ec-43d4-987e-4d02bb2db530}" name="guidApplePiePackageCmdSet1">
+      <IDSymbol value="4128" name="SolutionExplorerContextMenuGroup" />
+      <IDSymbol value="256" name="cmdidAddNewConfigurationPatch" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{0f06b629-bef2-4fdb-a2d8-4435c264b3a8}" name="guidImages1">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />
